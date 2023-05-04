@@ -1,0 +1,23 @@
+.App {
+  position: relative;
+}
+
+.A {
+  height:98vh;
+}
+
+.sidebar {
+  display: flex;
+}
+
+.sidebar__sidebar {
+  width: 30%;
+}
+
+.sidebar__main {
+  /* Take the remaining width */
+  flex: 1;
+
+  /* Make it scrollable */
+  overflow: auto;
+}
