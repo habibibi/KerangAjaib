@@ -2,40 +2,20 @@ const express = require('express');
 const router = express.Router();
 const Session = require('../models/session.model');
 
-// Get all sessions
-router.get('/sessions', async (req, res) => {
-    try {
-        const sessions = await Session.findAll();
-        res.json(sessions);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+router.get('/session', async (req, res) => {
+  const session = await Session.find();
+  res.json(session);
 });
 
-// Create a new session
-router.post('/sessions', async (req, res) => {
+router.post('/session', async (req, res) => {
+  const { id, name } = req.body;
+  const newSession = new Session({ id, name });
   try {
-    const session = await Session.create({});
-    res.status(201).json(session);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
+    await newSession.save();
+    res.json(newSession);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
   }
-});
-
-// Delete a session
-router.delete('/sessions/:id', async (req, res) => {
-    try {
-        const session = await Session.findByPk(req.params.id);
-        if (session) {
-            await session.destroy();
-            res.status(204).end();
-        } else {
-            res.status(404).json({ message: 'Session not found' });
-        }
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
 });
 
 module.exports = router;

@@ -1,19 +1,12 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const mongoose = require('mongoose');
 
-class Session extends Model {}
-
-Session.init({
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
+const sessionSchema = new mongoose.Schema({
+  id: { type: Number, required: true },
+  name: { type: String, required: true },
 }, {
-  sequelize,
-  timestamps: false,
-  modelName: 'session',
+  collection: 'session'
 });
+
+const Session = mongoose.model('session', sessionSchema);
 
 module.exports = Session;

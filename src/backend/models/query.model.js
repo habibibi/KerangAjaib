@@ -1,31 +1,13 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../database');
-const Session = require('./session.model');
+const mongoose = require('mongoose');
 
-class Query extends Model {}
-
-Query.init({
-  query: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false,
-  },
-  answer: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  sessionId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: Session,
-      key: 'id',
-    },
-    allowNull: false,
-  },
+const querySchema = new mongoose.Schema({
+  input: { type: String, required: true },
+  output: { type: String, required: true },
+  sessionID: { type: Number, required: true, ref: 'session' },
 }, {
-  sequelize,
-  timestamps: false,
-  modelName: 'query',
+  collection: 'query'
 });
+
+const Query = mongoose.model('query', querySchema);
 
 module.exports = Query;

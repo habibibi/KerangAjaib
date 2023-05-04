@@ -1,22 +1,12 @@
-const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../database');
+const mongoose = require('mongoose');
 
-class QnA extends Model {}
-
-QnA.init({
-  question: {
-    type: DataTypes.STRING,
-    primaryKey: true,
-    allowNull: false,
-  },
-  answer: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
+const qnaSchema = new mongoose.Schema({
+  question: { type: String, required: true },
+  answer: { type: String, required: true },
 }, {
-  sequelize,
-  timestamps: false,
-  modelName: 'qna',
+  collection: 'qna'
 });
 
-module.exports = QnA;
+const QNA = mongoose.model('QNA', qnaSchema);
+
+module.exports = QNA;
