@@ -33,6 +33,7 @@ async function getOutput(input, type) {
                 question: inpMatch[1],
                 answer: inpMatch[2]
             };
+            inpQuestion = "#" + qnaData.question + "#";
             output = "";
             if (qnas.length == 0) {
                 await qnaManager.insertQnA(qnaData);
@@ -40,12 +41,12 @@ async function getOutput(input, type) {
             } else {
                 qnaString = '#' + qnas.map(qna => `${qna.question}`).join('#') + '#';
                 if (type == "BM") {
-                    index = bmMatch(qnaString, qnaData.question);
+                    index = bmMatch(qnaString, inpQuestion);
                 } else {
-                    index = kmpMatch(qnaString, qnaData.question);
+                    index = kmpMatch(qnaString, inpQuestion);
                 }
                 if (index == -1) {
-                    // await qnaManager.insertQnA(qnaData);
+                    await qnaManager.insertQnA(qnaData);
                     output = "Pertanyaan " + qnaData.question + " berhasil ditambahkan dengan jawaban " + qnaData.answer;
                 } else {
                     await qnaManager.updateQnA(qnaData);
@@ -56,15 +57,16 @@ async function getOutput(input, type) {
         case "delete question":
             delMatch = input.match(/^hapus pertanyaan (.+)$/i);
             question = delMatch[1];
+            inpQuestion = "#" + question + "#";
             output = "";
             if (qnas.length == 0) {
                 output = "Tidak ada pertanyaan yang dapat dihapus";
             } else {
                 qnaString = '#' + qnas.map(qna => `${qna.question}`).join('#') + '#';
                 if (type == "BM") {
-                    index = bmMatch(qnaString, question);
+                    index = bmMatch(qnaString, inpQuestion);
                 } else {
-                    index = kmpMatch(qnaString, question);
+                    index = kmpMatch(qnaString, inpQuestion);
                 }
                 if (index >= 0) {
                     await qnaManager.deleteQnA(question);
@@ -75,7 +77,7 @@ async function getOutput(input, type) {
             }
             return output;
         case "general question":
-            inpQuestion = input;
+            inpQuestion = "#" + input + "#";
             output = "";
             if (qnas.length == 0) {
                 output = "Tidak ada pertanyaan pada database";
@@ -97,15 +99,19 @@ async function getOutput(input, type) {
                     distances = qnas.map(qna => {
                         return {
                             question: qna.question,
-                            distance: getLevenDist(qna.question, inpQuestion),
-                            maxLen: Math.max(qna.question.length, inpQuestion.length),
-                            percentage: (1 - (distance / maxLen)) * 100
+                            percentage: (1 - (getLevenDist(qna.question, inpQuestion) / Math.max(qna.question.length, inpQuestion.length))) * 100
                         };
                     });
                     distances.sort((a, b) => b.percentage - a.percentage);
-                    top3 = distances.slice(0, 3);
-                    if (top3[0].percentage >= 50) {
-                        output = "Apakah maksud Anda " + top3[0].question + "?";
+                    let top3Above50 = distances.filter(item => item.percentage > 50);
+                    if (top3Above50.length > 0) {
+                        output += "Apakah maksud Anda\n"
+                        top3Above50.forEach((item, index) => {
+                            output += `${index + 1}. ${item.question} (${item.percentage.toFixed(2)}%)`;
+                            if (index !== top3Above50.length - 1) {
+                                output += "\n";
+                            }
+                        });
                     } else {
                         output = "Pertanyaan tidak ditemukan dalam database";
                     }
@@ -117,15 +123,19 @@ async function getOutput(input, type) {
     }
 }
 
-async function main(input, type) {
-    console.log("input: " + input);
+async function test(input, type) {
+    console.log("\n" + "input: " + input);
     output = await getOutput(input, type);
     console.log("output: " + output);
 }
 
-// main("Hari apa 12/12/2012", "BM");
-// main("Hitung 1.5 - 2 ^ 3", "BM");
-// main("1 ^ 2 + 3", "BM");
-// main("tambah pertanyaan apa kabar dengan jawaban baik baik saja", "BM");
-main("hapus pertanyaan apa kabar", "KMP");
-// main("apa kabar", "BM");
+async function main() {
+    // await test("Hari apa 12/12/2012", "BM");
+    // await test("Hitung 1.5 - 2 ^ 3", "BM");
+    // await test("11.1 ^ 2 + 3", "BM");
+    // await test("tambah pertanyaan siapa presiden pertama di dunia dengan jawaban george washington", "BM");
+    // await test("hapus pertanyaan apa kabar", "KMP");
+    await test("apa nama ibukota", "BM");
+}
+
+main();
