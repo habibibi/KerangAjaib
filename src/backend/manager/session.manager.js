@@ -11,6 +11,10 @@ async function fetchSession() {
   }
 }
 
+async function bababa() {
+  const sessions = await fetchSession();
+}
+
 async function deleteAllSession() {
   try {
     const response = await axios.delete(`http://localhost:3000/api/session`);

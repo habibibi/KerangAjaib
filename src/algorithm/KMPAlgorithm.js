@@ -1,4 +1,4 @@
-const computeBorder = (pattern) => {
+function computeBorder(pattern) {
     const m = pattern.length
     const fail = new Array(m)
 
@@ -23,7 +23,7 @@ const computeBorder = (pattern) => {
     return fail
 }
 
-const KMPMatch = (text, pattern) => {
+function kmpMatch(text, pattern) {
     const n = text.length
     const m = pattern.length
     const b = computeBorder(pattern)
@@ -48,3 +48,4 @@ const KMPMatch = (text, pattern) => {
     return -1
 }
 
+module.exports = kmpMatch;

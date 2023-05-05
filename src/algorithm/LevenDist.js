@@ -1,5 +1,5 @@
 function getLevenDist(s1, s2){
-    // mengembalikan jarak levenshtein distance, 
+    // fungsi untuk mengembalikan jarak levenshtein distance, 
     // yaitu jumlah minimum operasi yang diperlukan untuk mengubah string s1 menjadi s2
     // semakin besar nilainya, maka semakin berbeda stringnya
     const dpArr = new Array(s1.length + 1).fill(0).map(() => new Array(s2.length + 1).fill(0));
@@ -22,3 +22,5 @@ function getLevenDist(s1, s2){
     }
     return dpArr[s1.length][s2.length];
 }
+
+module.exports = getLevenDist;

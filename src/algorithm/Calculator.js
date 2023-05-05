@@ -1,8 +1,5 @@
 // Define a function to evaluate arithmetic expressions
-function evaluateExpression(expression) {
-    // Split the expression into individual tokens (numbers, operators, parentheses)
-    const tokens = expression.split(/\s+/);
-  
+function evaluateExpression(tokens) {
     // Define stacks for operators and operands
     const operatorStack = [];
     const operandStack = [];
@@ -106,8 +103,4 @@ function precedence(operator) {
     }
 }
 
-// Test the evaluateExpression function
-console.log(evaluateExpression("1 + 2 * 3"));
-console.log(evaluateExpression("1 + 2 * 3 - 4"));
-console.log(evaluateExpression("1 + 2 * 3 - 4 / 5"));
-console.log(evaluateExpression("1 + 2 * 3 - 4 / 5 ^ 6"));
+module.exports = evaluateExpression;

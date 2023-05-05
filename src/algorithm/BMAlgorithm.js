@@ -1,13 +1,14 @@
-const buildLast = (pattern) => {
-    const last = new Array(128)
-
+function buildLast(pattern) {
+    const last = new Array(128);
+  
     for (let i = 0; i < pattern.length; i++) {
-        last[pattern.charAt(i)] = i
+      last[pattern.charAt(i)] = i;
     }
-    return last
+    
+    return last;
 }
 
-const bmMatch = (text, pattern) => {
+function bmMatch(text, pattern) {
     const n = text.length
     const m = pattern.length
     const last = buildLast(pattern)
@@ -40,3 +41,4 @@ const bmMatch = (text, pattern) => {
     }
 }
 
+module.exports = bmMatch;
