@@ -4,6 +4,9 @@ const mongoose = require('mongoose');
 const qnaRoute = require('./routes/qna.route');
 const queryRoute = require('./routes/query.route');
 const sessionRoute = require('./routes/session.route');
+const qnaManager = require('./manager/qna.manager');
+const queryManager = require('./manager/query.manager');
+const sessionManager = require('./manager/session.manager');
 const axios = require('axios');
 
 const PORT = process.env.PORT || 3000;
@@ -16,53 +19,32 @@ mongoose.connect(MONGODB_URI, {
 
 const db = mongoose.connection;
 db.on('error', (err) => console.error(err));
-db.once('open', () => console.log('Connected to MongoDB Atlas'));
+db.once('open', () => {
+  console.log('Connected to MongoDB Atlas');
 
-app.use(express.json());
-app.use('/api', qnaRoute);
-app.use('/api', queryRoute);
-app.use('/api', sessionRoute);
+  app.use(express.json());
+  app.use('/api', qnaRoute);
+  app.use('/api', queryRoute);
+  app.use('/api', sessionRoute);
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+    qnaManager.deleteAllQnA();
+  });
 });
 
 const qnaData = {
-  question: "What is the capital of France?",
-  answer: "Paris"
+  question: "What is the capital of France Now",
+  answer: "Paris Ala"
 };
-
-axios.post('http://localhost:3000/api/qna', qnaData)
-  .then(response => {
-    console.log("QnA data inserted");
-  })
-  .catch(error => {
-    console.error(error);
-  });
 
 const queryData = {
-  input: "What is the capital of France?",
-  output: "Paris",
-  sessionID: 1
+  input: "Apa aja deh?2",
+  output: "Woke2",
+  sessionID: 2
 };
-
-axios.post('http://localhost:3000/api/query', queryData)
-  .then(response => {
-    console.log("Query data inserted");
-  })
-  .catch(error => {
-    console.error(error);
-  });
 
 const sessionData = {
   id: 1,
   name: "Session 1"
 };
-
-axios.post('http://localhost:3000/api/session', sessionData)
-  .then(response => {
-    console.log("Session data inserted");
-  })
-  .catch(error => {
-    console.error(error);
-  });
