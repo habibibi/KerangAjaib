@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
-import './App.css';
-import styles from '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
+import React from 'react';
 import ChatManager from './components/chatmanager.js';
+
 function App() {
-	const [messageInputValue, setMessageInputValue] = useState("");
 	return (
-		<div className="App">
+		<div className='h-screen w-screen'>
       		<ChatManager />
 		</div>
 	);
