@@ -4,6 +4,7 @@ const getDayOfWeek = require('./Date');
 const evaluateExpression = require('./Calculator');
 const bmMatch = require('./BMAlgorithm');
 const kmpMatch = require('./KMPAlgorithm');
+const getLevenDist = require('./LevenDist');
 const qnaManager = require('../backend/manager/qna.manager');
 const queryManager = require('../backend/manager/query.manager');
 const sessionManager = require('../backend/manager/session.manager');
@@ -27,51 +28,104 @@ async function getOutput(input, type) {
             output = evaluateExpression(tokens);
             return output;
         case "insert question":
-            match = input.match(/^tambah pertanyaan (.+) dengan jawaban (.+)$/i);
+            inpMatch = input.match(/^tambah pertanyaan (.+) dengan jawaban (.+)$/i);
             qnaData = {
-                question: match[1],
-                answer: match[2]
+                question: inpMatch[1],
+                answer: inpMatch[2]
             };
             output = "";
             if (qnas.length == 0) {
                 await qnaManager.insertQnA(qnaData);
                 output = "Pertanyaan " + qnaData.question + " berhasil ditambahkan dengan jawaban " + qnaData.answer;
             } else {
-                for (let i = 0; i < qnas.length; i++) {
-                    question = qnas[i].question;
-                    answer = qnas[i].answer;
-                    if (type === "BM") {
-                        result = bmMatch(question, qnaData.question);
-                    } else if (type === "KMP") {
-                        result = kmpMatch(question, qnaData.question);
-                    }
-
-                    
-                    console.log(`Question: ${question}\nResult: ${result}`);
+                qnaString = '#' + qnas.map(qna => `${qna.question}`).join('#') + '#';
+                if (type == "BM") {
+                    index = bmMatch(qnaString, qnaData.question);
+                } else {
+                    index = kmpMatch(qnaString, qnaData.question);
+                }
+                if (index == -1) {
+                    // await qnaManager.insertQnA(qnaData);
+                    output = "Pertanyaan " + qnaData.question + " berhasil ditambahkan dengan jawaban " + qnaData.answer;
+                } else {
+                    await qnaManager.updateQnA(qnaData);
+                    output = "Pertanyaan " + qnaData.question + " berhasil diupdate dengan jawaban " + qnaData.answer;
                 }
             }
             return output;
         case "delete question":
-            match = input.match(/^hapus pertanyaan (.+)$/i);
-            question = match[1];
+            delMatch = input.match(/^hapus pertanyaan (.+)$/i);
+            question = delMatch[1];
             output = "";
+            if (qnas.length == 0) {
+                output = "Tidak ada pertanyaan yang dapat dihapus";
+            } else {
+                qnaString = '#' + qnas.map(qna => `${qna.question}`).join('#') + '#';
+                if (type == "BM") {
+                    index = bmMatch(qnaString, question);
+                } else {
+                    index = kmpMatch(qnaString, question);
+                }
+                if (index >= 0) {
+                    await qnaManager.deleteQnA(question);
+                    output = "Pertanyaan " + question + " berhasil dihapus";
+                } else {
+                    output = "Pertanyaan " + question + " tidak ditemukan dalam database";
+                }
+            }
             return output;
         case "general question":
+            inpQuestion = input;
             output = "";
-            return;
+            if (qnas.length == 0) {
+                output = "Tidak ada pertanyaan pada database";
+            } else {
+                qnaString = '#' + qnas.map(qna => `${qna.question}`).join('#') + '#';
+                if (type == "BM") {
+                    index = bmMatch(qnaString, inpQuestion);
+                } else {
+                    index = kmpMatch(qnaString, inpQuestion);
+                }
+                if (index >= 0) {
+                    endIndex = index + inpQuestion.length;
+                    substring = qnaString.substring(1, endIndex);
+                    parts = substring.split('#');
+                    dbQuestion = parts[parts.length - 1];
+                    qna = qnas.find(qna => qna.question == dbQuestion);
+                    output = qna.answer;
+                } else {
+                    distances = qnas.map(qna => {
+                        return {
+                            question: qna.question,
+                            distance: getLevenDist(qna.question, inpQuestion),
+                            maxLen: Math.max(qna.question.length, inpQuestion.length),
+                            percentage: (1 - (distance / maxLen)) * 100
+                        };
+                    });
+                    distances.sort((a, b) => b.percentage - a.percentage);
+                    top3 = distances.slice(0, 3);
+                    if (top3[0].percentage >= 50) {
+                        output = "Apakah maksud Anda " + top3[0].question + "?";
+                    } else {
+                        output = "Pertanyaan tidak ditemukan dalam database";
+                    }
+                }
+            }
+            return output;
         default:
             return "Tidak Ada ...";
     }
 }
 
 async function main(input, type) {
+    console.log("input: " + input);
     output = await getOutput(input, type);
-    console.log(output);
+    console.log("output: " + output);
 }
 
-// main("Hari apa 12/12/2012");
-// main("Hitung 1.5 - 2 ^ 3");
-// main("Hitung 1 ^ 2 + 3")
-main("tambah pertanyaan apa kabar dengan jawaban baik", "BM");
-// main("hapus pertanyaan apa kabar", "KMP");
-// main("apa kabar");
+// main("Hari apa 12/12/2012", "BM");
+// main("Hitung 1.5 - 2 ^ 3", "BM");
+// main("1 ^ 2 + 3", "BM");
+// main("tambah pertanyaan apa kabar dengan jawaban baik baik saja", "BM");
+main("hapus pertanyaan apa kabar", "KMP");
+// main("apa kabar", "BM");
