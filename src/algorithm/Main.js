@@ -6,8 +6,7 @@ const bmMatch = require('./BMAlgorithm');
 const kmpMatch = require('./KMPAlgorithm');
 const getLevenDist = require('./LevenDist');
 const qnaManager = require('../backend/manager/qna.manager');
-const queryManager = require('../backend/manager/query.manager');
-const sessionManager = require('../backend/manager/session.manager');
+const messageManager = require('../backend/manager/message.manager');
 
 async function getOutput(input, type) {
     // load the database
@@ -123,19 +122,18 @@ async function getOutput(input, type) {
     }
 }
 
-async function test(input, type) {
-    console.log("\n" + "input: " + input);
+async function queryHandler(sessionID, input, type) {
+    messageManager.insertMessage({text: input, sender: "user", sessionID: sessionID});
     output = await getOutput(input, type);
-    console.log("output: " + output);
+    messageManager.insertMessage({text: output, sender: "bot", sessionID: sessionID});
+    return output;
 }
 
-async function main() {
-    // await test("Hari apa 12/12/2012", "BM");
-    // await test("Hitung 1.5 - 2 ^ 3", "BM");
-    // await test("11.1 ^ 2 + 3", "BM");
-    // await test("tambah pertanyaan siapa presiden pertama di dunia dengan jawaban george washington", "BM");
-    // await test("hapus pertanyaan apa kabar", "KMP");
-    await test("apa nama ibukota", "BM");
-}
+module.exports = queryHandler;
 
-main();
+// main("Hari apa 12/12/2012", "BM");
+// main("Hitung 1.5 - 2 ^ 3", "BM");
+// main("1 ^ 2 + 3", "BM");
+// main("tambah pertanyaan hahahaha dengan jawaban baik baikhehe saja", "BM");
+// main("hapus pertanyaan apa kabar", "KMP");
+// main("apa kabar", "BM");

@@ -1,15 +1,16 @@
 import React, {useState} from "react";
 import { MdSend } from 'react-icons/md';
 
-function ChatInput({pushMessageCurrID, currSessionID, addSession}) {
+function ChatInput({pushUserMsgIdx, currSessionIdx, addSession, setSentMessage}) {
     const [chatInputText, setChatInputText] = useState('');
 
     function onClickPush() {
         if (chatInputText !== '') {
-            if (currSessionID === -1){
+            if (currSessionIdx === -1){
                 addSession(chatInputText);
             } else {
-                pushMessageCurrID("user", chatInputText);
+                pushUserMsgIdx(currSessionIdx,chatInputText);
+                setSentMessage(chatInputText);
             }
             setChatInputText('');
         }

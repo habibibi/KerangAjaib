@@ -1,10 +1,10 @@
+const { symlink } = require("fs");
+
 function buildLast(pattern) {
-    const last = new Array(128);
-  
+    const last = new Array(128).fill(-1);
     for (let i = 0; i < pattern.length; i++) {
-      last[pattern.charAt(i)] = i;
+      last[pattern.charCodeAt(i)] = i;
     }
-    
     return last;
 }
 
@@ -19,7 +19,7 @@ function bmMatch(text, pattern) {
     if (i > n - 1) {
         return -1
     }
-    else {
+    else {  
         do {
             if (pattern.charAt(j) == text.charAt(i)) {
                 if (j == 0) {
@@ -31,13 +31,13 @@ function bmMatch(text, pattern) {
                 }
             }
             else {
-                const lo = last[text.charAt(i)]
+                const lo = last[text.charCodeAt(i)]
                 i += m - Math.min(j, 1 + lo) 
                 j = m - 1
             }
         }
         while (i <= n - 1)
-            return -1
+        return -1
     }
 }
 

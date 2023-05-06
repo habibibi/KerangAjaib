@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Session = require('../models/session.model');
+const mongoose = require('mongoose');
 
 router.post('/session', async (req, res) => {
-  const { id, name } = req.body;
-  const newSession = new Session({ id, name });
+  const {  name } = req.body;
+  const newSession = new Session({ name });
   try {
     await newSession.save();
     res.json(newSession);
@@ -23,7 +24,21 @@ router.delete('/session', async (req, res) => {
 });
 
 router.get('/session', async (req, res) => {
-  const session = await Session.find().select({ _id: 0, __v: 0 });
+  const session = await Session.find().select({ __v: 0 });
+  res.json(session);
+});
+
+router.put('/session/:sessionID', async (req, res) => {
+  try {
+    const id = new mongoose.Types.ObjectId(req.params.sessionID);
+    const session = await Session.updateOne({"_id": id}, {$set: {"name": req.body.name}});
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.get('/session/lastinsert', async (req, res) => {
+  const session = await Session.find().sort({_id:-1}).limit(1);
   res.json(session);
 });
 

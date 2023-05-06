@@ -9,7 +9,7 @@ function classifyInput(input) {
   if (dateRegex.test(input)) {
     return "date";
   } else if (calculatorRegex.test(input)) {
-    return "calculator";    
+    return "calculatoraa";    
   } else if (insertQuestionRegex.test(input)) {
     return "insert question";
   } else if (deleteQuestionRegex.test(input)) {

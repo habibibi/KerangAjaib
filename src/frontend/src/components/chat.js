@@ -19,9 +19,9 @@ function Chat({message}){
     }
 
     return (
-        <div className={'flex flex-auto justify-center pt-5 min-w-0'+' '+bg_colour}>
+        <div className={'flex flex-row justify-center py-5 grow min-h-[7rem] '+bg_colour}>
             <img src={img} className='flex-none w-10 h-10 rounded-full mr-4 shadow-xl' alt='profile pic' />
-            <p className="font-sans text-[#682273] min-w-0 break-words h-20 w-[40rem] ">{message.text}</p>
+            <p className="font-sans text-[#682273] min-w-0 break-words w-[40rem] ">{message.text}</p>
         </div>
     )
 }
