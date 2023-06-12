@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { insertSession, updateSession, getAllSessions } = require('../services/session.service');
+const { insertSession, updateSession, getAllSessions } = require('../services/sessionDB.service');
 const { getMessagesBySessionID } = require('../services/messageDB.service');
 
 async function newSessionAPI(req, res) {

@@ -1,11 +1,11 @@
-const {insertMessage, getMessages} = require('../services/messageDB.service');
-const {getAllQNA, insertQNA, updateQNA, deleteQNA} = require('../services/qna.service');
-const classifyInput = require('../../algorithm/Regex');
-const getDayOfWeek = require('../../algorithm/Date');
-const evaluateExpression = require('../../algorithm/Calculator');
-const bmMatch = require('../../algorithm/BMAlgorithm');
-const kmpMatch = require('../../algorithm/KMPAlgorithm');
-const getLevenDist = require('../../algorithm/LevenDist');
+const {insertMessage} = require('../services/messageDB.service');
+const {getAllQNA, insertQNA, updateQNA, deleteQNA} = require('../services/qnaDB.service');
+const classifyInput = require('../algorithm/Regex');
+const getDayOfWeek = require('../algorithm/Date');
+const evaluateExpression = require('../algorithm/Calculator');
+const bmMatch = require('../algorithm/BMAlgorithm');
+const kmpMatch = require('../algorithm/KMPAlgorithm');
+const getLevenDist = require('../algorithm/LevenDist');
 
 async function queryHandlerAPI(req, res) {
     try {
