@@ -1,65 +1,55 @@
-const axios = require('axios');
+const mongoose = require('mongoose');
+const { insertSession, updateSession, getAllSessions } = require('../services/session.service');
+const { getMessagesBySessionID } = require('../services/messageDB.service');
 
-async function fetchSession() {
-  try {
-    const response = await axios.get('http://localhost:3000/api/db/session');
-    console.log("Session data fetch successful")
-    console.log(response.data)
-    return response.data;
-  } catch (error) {
-    console.log("Session data fetch failed")
-    return null;
+async function newSessionAPI(req, res) {
+  const name = req.body.name;
+  try{
+    const newSession = await insertSession(name);
+    return res.send({ sessionID : newSession._id.toString() });
+  } catch(err) {
+    console.log(err.message);
+    return res.status(500).send("Error creating new session");
   }
 }
 
-async function getLastInsertSessionID(){
-  try {
-    const response = await axios.get('http://localhost:3000/api/db/session/lastinsert');
-    console.log(response.data[0]._id);
-    return response.data[0]._id;
-  } catch (error) {
-    console.log("Session data fetch failed")
-    return null;
+async function fetchSessionMsgAPI(req, res) {
+  try{
+    const sessions = await getAllSessions();
+    console.log("hhmm\n",sessions)
+    aggregatedData = [];
+    for (let i = 0; i < sessions.length; i++) {
+      console.log("hoho ", sessions[i]._id);
+      const session = sessions[i].toObject();
+      const sessionID = session._id.toString();
+      messages = await getMessagesBySessionID(sessionID);
+      const sessionData = {
+        ...session,
+        messages: messages
+      };
+      aggregatedData.push(sessionData);
+    }
+    return res.send(JSON.stringify(aggregatedData));
+  }catch(err){
+    console.log(err.message);
+    return res.status(500).send("Error fetching session messages");
   }
 }
 
-async function insertSession(sessionData) {
-  try {
-    const response = await axios.post('http://localhost:3000/api/db/session', sessionData);
-    console.log("Session data insert successful");
-  } catch (error) {
-    console.log("Session data insert failed");
+async function updateSessionNameAPI(req, res) {
+  const newName = req.body.newName;
+  console.log(req.body.newName, req.params.sessionId);
+  try{
+    await updateSession(req.params.sessionID, newName);
+    return res.send("success");
+  }catch(err){
+    console.log(err.message);
+    return res.status(500).send("Error updating session name");
   }
-}
-
-async function updateSessionName(sessionID, sessionName) {
-  try {
-    const response = await axios.put(`http://localhost:3000/api/db/session/${sessionID}`, { name: sessionName });
-    console.log("Session data update successful");
-  } catch (error) {
-    console.log("Session data update failed");
-  }
-}
-
-async function deleteAllSession() {
-  try {
-    const response = await axios.delete(`http://localhost:3000/api/db/session`);
-    console.log("Session data delete successful");
-  } catch (error) {
-    console.log("Session data delete failed")
-  }
-}
-    
-async function printSession() {
-  const sessions = await fetchSession();
-  console.log(sessions); // or do something else with the array
 }
 
 module.exports = {
-  fetchSession,
-  getLastInsertSessionID,
-  deleteAllSession,
-  updateSessionName,
-  insertSession,
-  printSession
+  newSessionAPI,
+  fetchSessionMsgAPI,
+  updateSessionNameAPI
 };
