@@ -91,7 +91,6 @@ async function queryHandlerAPI(req, res) {
                         substring = qnaString.substring(1, endIndex);
                         parts = substring.split('#');
                         dbQuestion = parts[parts.length - 2];
-                        console.log(dbQuestion);
                         qna = qnas.find(qna => qna.question == dbQuestion);
                         response = qna.answer;
                     } else {

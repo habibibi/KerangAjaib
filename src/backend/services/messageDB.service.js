@@ -35,7 +35,8 @@ async function getMessages() {
 async function getMessagesBySessionID(sessionID) {
     try {
         const allMessages = await getMessages();
-        const messages = allMessages.filter(message => message.sessionID === sessionID);
+        const convID = new ObjectId(sessionID);
+        const messages = allMessages.filter(message => message.sessionID.equals(convID));
         return messages;
     } catch (err) {
         console.log(err.message);

@@ -2,7 +2,6 @@ const Session = require('../models/session.model');
 const mongoose = require('mongoose');
 
 async function insertSession(name) {
-    console.log(name);
     const newSession = new Session({ name });
     try {
         await newSession.save();

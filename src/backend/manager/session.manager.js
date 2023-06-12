@@ -16,10 +16,8 @@ async function newSessionAPI(req, res) {
 async function fetchSessionMsgAPI(req, res) {
   try{
     const sessions = await getAllSessions();
-    console.log("hhmm\n",sessions)
     aggregatedData = [];
     for (let i = 0; i < sessions.length; i++) {
-      console.log("hoho ", sessions[i]._id);
       const session = sessions[i].toObject();
       const sessionID = session._id.toString();
       messages = await getMessagesBySessionID(sessionID);
@@ -38,7 +36,6 @@ async function fetchSessionMsgAPI(req, res) {
 
 async function updateSessionNameAPI(req, res) {
   const newName = req.body.newName;
-  console.log(req.body.newName, req.params.sessionId);
   try{
     await updateSession(req.params.sessionID, newName);
     return res.send("success");
