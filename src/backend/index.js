@@ -29,7 +29,7 @@ db.once('open', () => {
     console.log(`Server listening on port ${PORT}`);
   });
 });
-console.log(path.join(__dirname,"../frontend/build"));
+
 app.use(express.static(path.join(__dirname,"../frontend/build")));
 
 module.exports = app;
