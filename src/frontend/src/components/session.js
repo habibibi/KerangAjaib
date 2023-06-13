@@ -10,7 +10,7 @@ function Session({idx, currSessionIdx, sessionList, setSessionList, setCurrSessi
         const tmp = sessionList.slice();
         tmp[idx].name = name;
         setSessionList(tmp);
-        axios.put(`http://localhost:3000/session/${tmp[idx].id}`, {newName : name});
+        axios.put('/api/session/${tmp[idx].id}', {newName : name});
     }
 
     var className;

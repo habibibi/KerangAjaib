@@ -5,6 +5,7 @@ const sessionRoute = require('./routes/session.route');
 const bodyParser = require('body-parser')
 const dotenv = require('dotenv').config();
 const cors = require('cors'); 
+const path = require("path");
 const PORT = process.env.PORT || 3000;
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -28,3 +29,4 @@ db.once('open', () => {
     console.log(`Server listening on port ${PORT}`);
   });
 });
+app.use(express.static(path.join(__dirname,"../frontend/build")));

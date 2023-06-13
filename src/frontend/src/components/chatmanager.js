@@ -35,7 +35,7 @@ function ChatManager() {
 
     useEffect(()=>{
         async function getSession() {
-            const response = await axios.get("http://localhost:3000/session");
+            const response = await axios.get("/api/session/messages");
             const data = response.data;
             console.log(data);
             const arr = [];
@@ -43,14 +43,13 @@ function ChatManager() {
                 const id = data[i]._id;
                 const name = data[i].name;
                 const tmp = new session(id, name);
-                for (let j = 0; j < data[i].message.length; j++) {
-                    const sender = data[i].message[j].sender;
-                    const text = data[i].message[j].text;
+                for (let j = 0; j < data[i].messages.length; j++) {
+                    const sender = data[i].messages[j].sender;
+                    const text = data[i].messages[j].text;
                     tmp.pushMessage(sender, text);
                 }
                 arr.push(tmp);
             }
-            console.log(arr);
             setSessionList(arr);
         }
         getSession();
@@ -61,10 +60,7 @@ function ChatManager() {
             try{
                 if (sentMessage === '')  return;
                 const tmp = sessionList.slice();
-                console.log(sessionList)
-                console.log(currSessionIdx)
-                console.log(tmp[currSessionIdx].id)
-                const response = await axios.post("http://localhost:3000/query", {query : sentMessage, sessionID : tmp[currSessionIdx].id, algo : algo});
+                const response = await axios.post("/api/query", {query : sentMessage, sessionID : tmp[currSessionIdx].id, algo : algo});
                 tmp[currSessionIdx].pushMessage("bot", response.data.answer);
                 setSessionList(tmp);
                 setSentMessage('');
@@ -77,7 +73,7 @@ function ChatManager() {
 
     async function addSession(firstMessage) {
         const tmp = sessionList.slice();
-        const response  = await axios.post("http://localhost:3000/session", {name: "New Session"});
+        const response  = await axios.post("/api/session", {name: "New Session"});
         const id = response.data.sessionID;
         tmp.push(new session(id, "New Session"));
         tmp[tmp.length-1].pushMessage("user", firstMessage);
