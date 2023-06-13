@@ -37,7 +37,8 @@ async function fetchSessionMsgAPI(req, res) {
 async function updateSessionNameAPI(req, res) {
   const newName = req.body.newName;
   try{
-    await updateSession(req.params.sessionID, newName);
+    console.log(req.params.sessionId)
+    await updateSession(req.params.sessionId, newName);
     return res.send("success");
   }catch(err){
     console.log(err.message);

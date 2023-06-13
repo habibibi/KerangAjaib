@@ -10,7 +10,8 @@ function Session({idx, currSessionIdx, sessionList, setSessionList, setCurrSessi
         const tmp = sessionList.slice();
         tmp[idx].name = name;
         setSessionList(tmp);
-        axios.put('/api/session/${tmp[idx].id}', {newName : name});
+        console.log(tmp[idx].id)
+        axios.put(`/api/session/${tmp[idx].id}`, {newName : name});
     }
 
     var className;

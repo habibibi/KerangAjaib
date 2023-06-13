@@ -33,43 +33,46 @@ function ChatManager() {
         setSessionList(tmp);
     }
 
-    useEffect(()=>{
-        async function getSession() {
-            const response = await axios.get("/api/session/messages");
-            const data = response.data;
-            console.log(data);
-            const arr = [];
-            for (let i = 0; i < data.length; i++) {
-                const id = data[i]._id;
-                const name = data[i].name;
-                const tmp = new session(id, name);
-                for (let j = 0; j < data[i].messages.length; j++) {
-                    const sender = data[i].messages[j].sender;
-                    const text = data[i].messages[j].text;
-                    tmp.pushMessage(sender, text);
-                }
-                arr.push(tmp);
+    async function fetchSessionMsg() {
+        const response = await axios.get("/api/session/messages");
+        const data = response.data;
+        console.log(data);
+        const arr = [];
+        for (let i = 0; i < data.length; i++) {
+            const id = data[i]._id;
+            const name = data[i].name;
+            const tmp = new session(id, name);
+            for (let j = 0; j < data[i].messages.length; j++) {
+                const sender = data[i].messages[j].sender;
+                const text = data[i].messages[j].text;
+                tmp.pushMessage(sender, text);
             }
-            setSessionList(arr);
+            arr.push(tmp);
         }
-        getSession();
+        setSessionList(arr);
+    }
+
+    async function pushUserMsg() {
+        try{
+            if (sentMessage === '')  return;
+            const tmp = sessionList.slice();
+            const response = await axios.post("/api/query", {query : sentMessage, sessionID : tmp[currSessionIdx].id, algo : algo});
+            tmp[currSessionIdx].pushMessage("bot", response.data.answer);
+            setSessionList(tmp);
+            setSentMessage('');
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
+
+    useEffect(()=>{
+        fetchSessionMsg();
     }, [])
 
-    useEffect( () => {
-        async function pushUserMsg() {
-            try{
-                if (sentMessage === '')  return;
-                const tmp = sessionList.slice();
-                const response = await axios.post("/api/query", {query : sentMessage, sessionID : tmp[currSessionIdx].id, algo : algo});
-                tmp[currSessionIdx].pushMessage("bot", response.data.answer);
-                setSessionList(tmp);
-                setSentMessage('');
-            } catch (err) {
-                console.log(err);
-            }
-        }
+    useEffect(() => {
         pushUserMsg();
-    }, [sentMessage, currSessionIdx, algo, sessionList])
+    }, [sentMessage])
 
     async function addSession(firstMessage) {
         const tmp = sessionList.slice();

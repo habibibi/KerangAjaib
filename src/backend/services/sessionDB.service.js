@@ -31,7 +31,9 @@ async function getAllSessions() {
 
 async function updateSession(sessionID, name) {
     try {
+        console.log(sessionID);
         const id = new mongoose.Types.ObjectId(sessionID);
+        console.log(id);
         const session = await Session.updateOne({"_id": id}, {$set: {"name": name}});
     } catch (err) {
         throw err;
