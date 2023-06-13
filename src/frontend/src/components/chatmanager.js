@@ -2,7 +2,6 @@ import React, {useState, useEffect, useRef} from "react";
 import ChatContainer from './chatcontainer.js';
 import SessionList from './sessionlist.js';
 import ChatInput from './chatinput.js';
-import ScrollToBottom from 'react-scroll-to-bottom';
 import axios from 'axios';
 
 function message(sender, profileType, text) {
@@ -52,18 +51,7 @@ function ChatManager() {
         setSessionList(arr);
     }
 
-    async function pushUserMsg() {
-        try{
-            if (sentMessage === '')  return;
-            const tmp = sessionList.slice();
-            const response = await axios.post("/api/query", {query : sentMessage, sessionID : tmp[currSessionIdx].id, algo : algo});
-            tmp[currSessionIdx].pushMessage("bot", response.data.answer);
-            setSessionList(tmp);
-            setSentMessage('');
-        } catch (err) {
-            console.log(err);
-        }
-    }
+
 
 
     useEffect(()=>{
@@ -71,8 +59,20 @@ function ChatManager() {
     }, [])
 
     useEffect(() => {
+        async function pushUserMsg() {
+            try{
+                if (sentMessage === '')  return;
+                const tmp = sessionList.slice();
+                const response = await axios.post("/api/query", {query : sentMessage, sessionID : tmp[currSessionIdx].id, algo : algo});
+                tmp[currSessionIdx].pushMessage("bot", response.data.answer);
+                setSessionList(tmp);
+                setSentMessage('');
+            } catch (err) {
+                console.log(err);
+            }
+        }
         pushUserMsg();
-    }, [sentMessage])
+    }, [sentMessage,algo,currSessionIdx,sessionList])
 
     async function addSession(firstMessage) {
         const tmp = sessionList.slice();
