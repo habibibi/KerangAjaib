@@ -1,15 +1,15 @@
 // Define regular expressions for different categories
-const dateRegex = /Hari apa|\b\d{1,2}\/\d{1,2}\/\d{4}\b/;
+const dateRegex = /(Hari apa)?\b\d{1,2}\/\d{1,2}\/\d{4}\b/;
 const calculatorRegex = /Hitung|Berapa|(\d+(\.\d+)?|[\+\-\*\/\^\(\)])/g;
-const insertQuestionRegex = /^tambah pertanyaan (.+) dengan jawaban (.+)$/i;
-const deleteQuestionRegex = /^hapus pertanyaan (.+)$/i;
+const insertQuestionRegex = /^[Tt]ambah pertanyaan (.+) dengan jawaban (.+)$/i;
+const deleteQuestionRegex = /^[Hh]apus pertanyaan (.+)$/i;
 
 // Define a function to classify the input into different categories
 function classifyInput(input) {
   if (dateRegex.test(input)) {
     return "date";
   } else if (calculatorRegex.test(input)) {
-    return "calculatoraa";    
+    return "calculator";    
   } else if (insertQuestionRegex.test(input)) {
     return "insert question";
   } else if (deleteQuestionRegex.test(input)) {
