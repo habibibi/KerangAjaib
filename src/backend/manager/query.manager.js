@@ -16,6 +16,7 @@ async function queryHandlerAPI(req, res) {
         let response;
         let qnas = await getAllQNA();
         category = classifyInput(query);
+        console.log(category);
         switch (category) {
             case "date":
                 dateStr = query.match(/\d{1,2}\/\d{1,2}\/\d{4}/)[0];
