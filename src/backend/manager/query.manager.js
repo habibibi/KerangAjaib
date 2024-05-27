@@ -35,7 +35,7 @@ async function queryHandlerAPI(req, res) {
                 inpQuestion = "#" + qnaData.question + "#";
                 response = "";
                 if (qnas.length == 0) {
-                    await insertQNA(qnaData);
+                    await insertQNA(qnaData.question, qnaData.answer);
                     response = "Pertanyaan " + qnaData.question + " berhasil ditambahkan dengan jawaban " + qnaData.answer;
                 } else {
                     qnaString = '#' + qnas.map(qna => `${qna.question}`).join('#') + '#';
