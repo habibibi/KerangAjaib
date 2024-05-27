@@ -11,25 +11,24 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const app = express();
 app.use(cors())
+app.use(express.json());
+
+app.use('/api', queryRoute);
+app.use('/api', sessionRoute);
+app.use(express.static(path.join(__dirname,"../frontend/build")));
+
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 const db = mongoose.connection;
 db.on('error', (err) => console.error(err));
 db.once('open', () => {
   console.log('Connected to MongoDB Atlas');
-  app.use('/api', queryRoute);
-  app.use('/api', sessionRoute);
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
   });
 });
-
-app.use(express.static(path.join(__dirname,"../frontend/build")));
 
 module.exports = app;
