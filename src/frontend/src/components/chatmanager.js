@@ -25,6 +25,7 @@ function ChatManager() {
     const [currSessionIdx, setCurrSessionIdx] = useState(-1);
     const [sentMessage, setSentMessage] = useState('');
     const [algo, setAlgo] = useState("KMP");
+    const [isLoading, setIsLoading] = useState(true);
 
     async function pushUserMsgIdx(idx,text) {
         const tmp = sessionList.slice();
@@ -33,22 +34,28 @@ function ChatManager() {
     }
 
     async function fetchSessionMsg() {
-        const response = await axios.get("/api/session/messages");
-        const data = response.data;
-        console.log(data);
-        const arr = [];
-        for (let i = 0; i < data.length; i++) {
-            const id = data[i]._id;
-            const name = data[i].name;
-            const tmp = new session(id, name);
-            for (let j = 0; j < data[i].messages.length; j++) {
-                const sender = data[i].messages[j].sender;
-                const text = data[i].messages[j].text;
-                tmp.pushMessage(sender, text);
+        try{
+            const response = await axios.get("/api/session/messages");
+            const data = response.data;
+            console.log(data);
+            const arr = [];
+            for (let i = 0; i < data.length; i++) {
+                const id = data[i]._id;
+                const name = data[i].name;
+                const tmp = new session(id, name);
+                for (let j = 0; j < data[i].messages.length; j++) {
+                    const sender = data[i].messages[j].sender;
+                    const text = data[i].messages[j].text;
+                    tmp.pushMessage(sender, text);
+                }
+                arr.push(tmp);
             }
-            arr.push(tmp);
+            setSessionList(arr);
+            setIsLoading(false);
+        } catch (err) {
+            console.log(err);
+            setIsLoading(false);
         }
-        setSessionList(arr);
     }
 
 
@@ -92,6 +99,17 @@ function ChatManager() {
 
     const onOptionChange = e => {
     setAlgo(e.target.value)
+    }
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center h-screen bg-ungu0">
+                <div className="flex flex-col items-center justify-center">
+                    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-ungu3"></div>
+                    <p className="text-black text-xl mt-5">Loading...</p>
+                </div>
+            </div>
+        )
     }
 
     return (
