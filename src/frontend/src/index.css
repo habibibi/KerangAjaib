@@ -15,3 +15,41 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.sidebar {
+  transition: left 0.3s ease;
+}
+
+.sidebar-hidden {
+  left: -260px;
+}
+
+.sidebar-visible {
+  left: 0;
+}
+
+.black-overlay {
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.black-overlay-enable {
+  opacity: 0.5;
+  pointer-events: auto;
+}
+
+.black-overlay-disable {
+  opacity: 0.0;
+  pointer-events: none;
+}
+
+.rotate-720 {
+  transform: rotate(720deg);
+  transition: transform 0.3s ease;
+}
+
+.rotate-0 {
+  transform: rotate(0deg);
+  transition: transform 0.3s ease;
+}

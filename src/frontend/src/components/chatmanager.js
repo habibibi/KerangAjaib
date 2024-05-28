@@ -1,4 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
+import { FaBars } from "react-icons/fa";
+import { useMediaQuery } from 'react-responsive';
 import ChatContainer from './chatcontainer.js';
 import SessionList from './sessionlist.js';
 import ChatInput from './chatinput.js';
@@ -26,6 +28,7 @@ function ChatManager() {
     const [sentMessage, setSentMessage] = useState('');
     const [algo, setAlgo] = useState("KMP");
     const [isLoading, setIsLoading] = useState(true);
+    const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
     async function pushUserMsgIdx(idx,text) {
         const tmp = sessionList.slice();
@@ -59,7 +62,9 @@ function ChatManager() {
     }
 
 
-
+    function handleSideBarButtonClick() {
+        setIsSideBarOpen(!isSideBarOpen);
+    }
 
     useEffect(()=>{
         fetchSessionMsg();
@@ -101,6 +106,9 @@ function ChatManager() {
     setAlgo(e.target.value)
     }
 
+    const isMdOrLarger = useMediaQuery({ minWidth: 768 }); // Adjust this value according to your Tailwind configuration
+
+
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center h-screen bg-ungu0">
@@ -114,8 +122,18 @@ function ChatManager() {
 
     return (
         <div className='flex h-full w-full'>
-            <div className="flex flex-none flex-col overflow-hidden w-[260px] p-2 bg-ungu4 h-full">
-                <div className="flex-1 min-h-0">
+            {isMdOrLarger ? 
+                <></> :
+                <div className={`fixed z-10 h-full w-full bg-black black-overlay ${isSideBarOpen ? 'black-overlay-enable' : 'black-overlay-disable' }`} onClick={handleSideBarButtonClick}></div>
+            }
+            <div className={`flex max-md:fixed sidebar ${isSideBarOpen ? 'sidebar-visible ' : 'sidebar-hidden' } z-10 flex-none flex-col w-[260px] p-2 bg-ungu4 h-full`}>
+                {isMdOrLarger ? 
+                    <></> :
+                    <button className={`absolute right-[-37px] bg-ungu0 p-1 rounded-md border-ungu2 border-2 shadow-md" onClick={handleSideBarButtonClick} ${isSideBarOpen ? 'rotate-720' : 'rotate-0'}`} onClick={handleSideBarButtonClick}>
+                        <FaBars className="text-ungu3 w-5 h-5"/>
+                    </button> 
+                }
+                <div className="flex-1">
                     <SessionList
                         sessionList={sessionList} 
                         currSessionIdx={currSessionIdx}
@@ -134,7 +152,7 @@ function ChatManager() {
                     </form>
                 </div>
             </div>
-            <div className="flex-1 relative flex w-full h-full flex-row bg-ungu0">
+            <div className="flex-1 relative flex h-full flex-row bg-ungu0">
                 <div className='w-full overflow-auto scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-ungu2 scrollbar-thumb-rounded-lg'>
                     {currSessionIdx === -1 ? 
                         <></> 

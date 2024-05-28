@@ -20,9 +20,9 @@ function Chat({message}){
     console.log(message.text);
 
     return (
-        <div className={'flex flex-row justify-center py-5 grow min-h-[7rem] '+bg_colour}>
+        <div className={'flex flex-row justify-center py-5 min-h-[7rem] p-4 w-full '+bg_colour}>
             <img src={img} className='flex-none w-10 h-10 rounded-full mr-4 shadow-xl' alt='profile pic' />
-            <p className="font-sans text-[#682273] min-w-0 break-words w-[40rem] whitespace-pre-wrap">{message.text}</p>
+            <p className="font-sans text-[#682273] break-words max-w-[40rem] flex-1 whitespace-pre-wrap">{message.text}</p>
         </div>
     )
 }
