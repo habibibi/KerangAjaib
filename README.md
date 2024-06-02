@@ -1,6 +1,6 @@
 # ChatBot Pattern Matching - KerangAjaib
 > Tugas Besar 3 IF2211 Strategi Algoritma Semester II Tahun 2022/2023 Penerapan String Matching dan Regular Expression dalam Pembuatan ChatGPT Sederhana  
-> Live demo [_here_](https://kerang-ajaib-sepia.vercel.app). <!-- If you have the project hosted somewhere, include the link here. -->
+> Live demo [_here_](https://kerang-ajaib-habibibi.vercel.app). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
 * [General Info](#general-information)
