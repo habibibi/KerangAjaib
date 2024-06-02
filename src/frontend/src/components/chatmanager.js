@@ -171,7 +171,7 @@ function ChatManager() {
                                 <div className="relative bottom-0 text-ungu2 text-center">
                                     <p>Command Help:</p>
                                     <ul>
-                                        <li>Add/update question: "tambahkan pertanyaan [pertanyaan] dengan jawaban [jawaban]"</li>
+                                        <li>Add/update question: "tambah pertanyaan [pertanyaan] dengan jawaban [jawaban]"</li>
                                         <li>Delete question: "hapus pertanyaan [pertanyaan]"</li>
                                         <li>Math question: tambahkan persamaan matematika pada pesan teks </li>
                                         <li>Date question: tambahkan format tanggal dd/mm/yyyy pada pesan teks </li>
