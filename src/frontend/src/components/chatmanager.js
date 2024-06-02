@@ -173,8 +173,8 @@ function ChatManager() {
                                     <ul>
                                         <li>Add/update question: "tambahkan pertanyaan [pertanyaan] dengan jawaban [jawaban]"</li>
                                         <li>Delete question: "hapus pertanyaan [pertanyaan]"</li>
-                                        <li>Math question: tambahkan persamaan matematika pada pesan text </li>
-                                        <li>Date question: tambahkan format tanggal dd/mm/yyyy pada pesan text </li>
+                                        <li>Math question: tambahkan persamaan matematika pada pesan teks </li>
+                                        <li>Date question: tambahkan format tanggal dd/mm/yyyy pada pesan teks </li>
                                     </ul>
                                 </div>
                                 :
