@@ -1,6 +1,6 @@
 # ChatBot Pattern Matching - KerangAjaib
-> Tugas Besar 3 IF2211 Strategi Algoritma Semester II Tahun 2022/2023 Penerapan String Matching dan Regular Expression dalam Pembuatan ChatGPT Sederhana
-> Live demo [_here_](https://www.example.com). <!-- If you have the project hosted somewhere, include the link here. -->
+> Tugas Besar 3 IF2211 Strategi Algoritma Semester II Tahun 2022/2023 Penerapan String Matching dan Regular Expression dalam Pembuatan ChatGPT Sederhana  
+> Live demo [_here_](https://kerang-ajaib-sepia.vercel.app). <!-- If you have the project hosted somewhere, include the link here. -->
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -9,10 +9,7 @@
 * [Features](#features)
 * [Screenshots](#screenshots)
 * [How to Use](#how-to-use)
-* [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
 * [Authors](#authors)
-<!-- * [License](#license) -->
 
 
 ## General Information
@@ -29,7 +26,6 @@ The search for the question that is most similar to the user-given question is p
 3. [Sequelize ORM](https://sequelize.org/)
 
 ## Features
-List the ready features here:
 1. Text question (obtained from database)
 2. Calculator
 3. Date
@@ -38,30 +34,17 @@ List the ready features here:
 
 
 ## Screenshots
-![Example screenshot](./img/screenshot.png)
-<!-- If you have screenshots you'd like to share, include them here. -->
-
+![Example screenshot](./doc/screenshot.png)
 
 ## How to Use
 If you want to check the webiste use this: 
 
-If you want to run it locally just download the repository using `git clone https://github.com/ferindya/Tubes3_13521118` and make sure you have `node js` installed on your machine
+If you want to run it locally just download the repository using `https://github.com/habibibi/KerangAjaib.git` and make sure you have `node js` installed on your machine
 
-1. Frontend
-* move to frontend directory using `cd frontend`
-* run `npm install`
-* After install all the dependencies run `npm run dev` to start it locally
-
-2. Backend
-*  move to backend directory using `cd backend`
-*  run `npm install`
-*  After install all the dependencies run `npm run start` or `npm run start:dev` for development
-
-
-## Project Status
-Project is:  _complete_ . 
-
-
+0. Setup .env file for each server. For MONGODB_URI, filled it with your personal MongoDB uri.
+1. Move to src directory using `cd src`
+2. Run `npm run install-all`
+3. Run the server with `npm run dev`
 
 ## Authors
 
